@@ -20,11 +20,8 @@ beautifyHTMLERB = null
 beautifyMarkdown = null
 
 # Misc
-Analytics = require("analytics-node")
 pkg = require("../package.json")
 
-# Analytics
-analyticsWriteKey = "u3c26xkae8"
 module.exports =
 
   # Supported unique configuration keys
@@ -230,27 +227,6 @@ module.exports =
       else
         unsupportedGrammar = true
 
-    # Check if Analytics is enabled
-    if atom.config.get("atom-beautify.analytics")
-      # Setup Analytics
-      analytics = new Analytics(analyticsWriteKey)
-      unless atom.config.get("atom-beautify._analyticsUserId")
-        uuid = require("node-uuid")
-        atom.config.set "atom-beautify._analyticsUserId", uuid.v4()
-      # Setup Analytics User Id
-      userId = atom.config.get("atom-beautify._analyticsUserId")
-      analytics.identify userId: userId
-      version = pkg.version
-      analytics.track
-        userId: atom.config.get("atom-beautify._analyticsUserId")
-        event: "Beautify"
-        properties:
-          grammar: grammar
-          version: version
-          options: allOptions
-          label: grammar
-          category: version
-    #
     if unsupportedGrammar
       if atom.config.get("atom-beautify.muteUnsupportedLanguageErrors")
         return beautifyCompleted(null)
